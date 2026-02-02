@@ -37,10 +37,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
+        env:
+          IMAGE_NAME: ghcr.io/${{ github.repository }}
         run: |
-          # Convertimos el nombre del repositorio a minúsculas manualmente para evitar el error
-          REPO_LOWER=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          IMAGE=ghcr.io/$REPO_LOWER:latest
+          # Forzamos minúsculas y limpiamos espacios
+          IMAGE=$(echo "${{ env:IMAGE_NAME }}" | tr '[:upper:]' '[:lower:]')
           
+          echo "Construyendo imagen: $IMAGE"
           docker build -t $IMAGE .
-          docker push $IMAGEgit add .
+          
+          echo "Subiendo imagen: $IMAGE"
+          docker push $IMAG
